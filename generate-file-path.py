@@ -20,6 +20,7 @@ txtfile_path = os.path.join(folder, 'train.txt')
 
 # current index is still fixed, will change to arguments once workload increases
 def generate():
+    count = 1
     global folder
     imgfolder = os.path.join(folder, 'img')
     print(imgfolder)
@@ -49,11 +50,15 @@ def generate():
                         new_item = ' '.join(item)
                         #print(new_item)
                         new_list.append(new_item)
-                    print(reader)
+                    #print(reader)
                     print(new_list)
                 with open(txtfile_path, 'w') as h:
-                    if len(new_list) != 0:
-                        h.writelines(new_list)
+                     h.writelines(new_list)
+                print(count)
+                count += 1
+
+def remove_file():
+    # remove both txt and img file if the contents in txt file is empty
 
 if __name__ == "__main__":
     generate()
