@@ -38,6 +38,7 @@ def generate():
                 with open(txtfile_path, 'r') as g:
                     reader = g.readlines()
                     new_list = []
+                    # todo: change to six significant figure
                     for line in reader:
                         item = line.split(' ')
                         # check if data point is for segmentation
@@ -57,8 +58,27 @@ def generate():
                 print(count)
                 count += 1
 
-def remove_file():
+#def remove_file():
     # remove both txt and img file if the contents in txt file is empty
 
+def change_sig_fig():
+    global folder
+    imgfolder = os.path.join(folder, 'img')
+    for file in os.listdir(imgfolder):
+        txtfile_path = os.path.join(imgfolder, file)
+        with open(txtfile_path, 'r') as g:
+            reader = g.readlines()
+            new_list = []
+                    # todo: change to six significant figure
+            for line in reader:
+                item = line.split(' ')
+                for element in item:
+                    if element == '\n':
+                        continue
+                    element = float(element)
+                    element = f'{element:.6}'
+                    print(element)
+
+
 if __name__ == "__main__":
-    generate()
+    change_sig_fig()
