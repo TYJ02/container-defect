@@ -4,7 +4,6 @@ import sys
 
 # this script generates image folder neccessary for training model in cira core without the need of manual labeliing 
 
-# to improve this script, we should do relative path
 
 parser = argparse.ArgumentParser('convert class index')
 parser.add_argument("-f", metavar="from", dest="by", type=int, help="from which class index")
@@ -34,7 +33,6 @@ def generate():
         for file in os.listdir(imgfolder):
             if file.endswith('.jpg'):
                 imgfile_path = os.path.join('data/img', file)
-                print(imgfile_path)
                 f.write(imgfile_path)
                 f.write('\n')
             if file.endswith('.txt'):
@@ -42,12 +40,17 @@ def generate():
                 with open(txtfile_path, 'r') as g:
                     reader = g.readlines()
                     new_list = []
-                    # todo: change to six significant figure
+                    new_reader = []
                     for line in reader:
+                        line = line.rstrip('\n')
+                        new_reader.append(line)
+                    # todo right strip away the newline character
+                    for line in new_reader:
                         item = line.split(' ')
                         # check if data point is for segmentation
-                        if len(item) > 5:
-                            continue
+                        # if yes, remove the boundary box
+                        # if len(item) > 5:
+                        #    continue
                         if item [0] == '0':
                             item[0] = '451'
                         elif item [0] == '1':
@@ -58,23 +61,29 @@ def generate():
                     #print(reader)
                     print(new_list)
                 with open(txtfile_path, 'w') as h:
-                     h.writelines(new_list)
+                    for line in new_list:
+                        h.write(f'{line}\n')
                 print(count)
                 count += 1
 
 def iso_segment_data():
-    # remove both txt and img file if the contents in txt file is empty
+    # find and count the number of segmentation data in the datset
     global folder
     imgfolder = os.path.join(folder, 'img')
     count = 0
     for file in os.listdir(imgfolder):
+        id = file.rstrip('.txt')
+        print(id)
         if file.endswith('.txt'):
             txtfile_path = os.path.join(imgfolder, file)
             with open(txtfile_path, 'r') as g:
                 reader = g.readlines()
+                new_reader = []
                 for line in reader:
+                    line = line.rstrip('\n')
+                    new_reader.append(line)
+                for line in new_reader:
                     item = line.split(' ')
-                    print(item)
                     if len(item) > 6:
                         print('segment data found')
                         count += 1
@@ -87,27 +96,49 @@ def change_sig_fig():
     for file in os.listdir(imgfolder):
         if file.endswith('.txt'):
             txtfile_path = os.path.join(imgfolder, file)
+            with open(txtfile_path, 'r') as g:
+                new_list = []
+                reader = g.readlines()
+                new_reader = []
+                for line in reader:
+                    line = line.rstrip('\n')
+                    new_reader.append(line)
+                for line in new_reader:
+                    item = line.split(' ')
+                    new_item = []
+                    for i, element in enumerate(item):
+                        if i == 0:
+                            new_item.append(element)
+                        else:
+                            element = float(element)
+                            element = f'{element:.6g}'
+                            element = float(element)
+                            print(element)
+                            new_item.append(str(element))
+                    # fix here
+                    new_item = ' '.join(item)
+                    new_list.append(new_item)
+                print(f'new list is {new_list}')
+            with open(txtfile_path, 'w') as h:
+                for line in new_list:
+                    h.write(f'{line}\n')
+
+
+def remove():
+    global folder
+    imgfolder = os.path.join(folder, 'img')
+    for file in os.listdir(imgfolder):
+        if file.endswith('.txt'):
+            txtfile_path = os.path.join(imgfolder, file)
             new_list = []
             with open(txtfile_path, 'r') as g:
                 reader = g.readlines()
-                        # todo: change to six significant figure
+                new_reader = []
                 for line in reader:
-                    item = line.split(' ')
-                    for i,element in enumerate(item):
-                        if element == '\n':
-                            continue
-                        if i == 0:
-                            continue
-                        element = float(element)
-                        element = f'{element:.6g}'
-                        element = float(element)
-                        print(element)
-                        item[i] = str(element)
-                    new_item = ' '.join(item)
-                    new_list.append(new_item)
-                print(new_list)
-            with open(txtfile_path, 'w') as h:
-                h.writelines(new_list)
+                    line = line.rstrip('\n')
+                    new_reader.append(line)
+
+
 
 
 if __name__ == "__main__":
