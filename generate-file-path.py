@@ -1,5 +1,6 @@
 import os
 import argparse
+import sys
 
 # this script generates image folder neccessary for training model in cira core without the need of manual labeliing 
 
@@ -8,11 +9,14 @@ import argparse
 parser = argparse.ArgumentParser('convert class index')
 parser.add_argument("-f", metavar="from", dest="by", type=int, help="from which class index")
 parser.add_argument("-t", metavar="to", dest="to", type=int, help="to which class index")
+parser.add_argument("-mode", metavar="mode", dest="mode", type=str, help="to which class index")
 args = parser.parse_args()
 to_index = args.to
 from_index = args.by
+mode = args.mode
 print(to_index)
 print(from_index)
+print(mode)
 
 folder = os.getcwd()
 txtfile_path = os.path.join(folder, 'train.txt')
@@ -58,27 +62,56 @@ def generate():
                 print(count)
                 count += 1
 
-#def remove_file():
+def iso_segment_data():
     # remove both txt and img file if the contents in txt file is empty
+    global folder
+    imgfolder = os.path.join(folder, 'img')
+    count = 0
+    for file in os.listdir(imgfolder):
+        if file.endswith('.txt'):
+            txtfile_path = os.path.join(imgfolder, file)
+            with open(txtfile_path, 'r') as g:
+                reader = g.readlines()
+                for line in reader:
+                    item = line.split(' ')
+                    print(item)
+                    if len(item) > 6:
+                        print('segment data found')
+                        count += 1
+    print(count)
+
 
 def change_sig_fig():
     global folder
     imgfolder = os.path.join(folder, 'img')
     for file in os.listdir(imgfolder):
-        txtfile_path = os.path.join(imgfolder, file)
-        with open(txtfile_path, 'r') as g:
-            reader = g.readlines()
+        if file.endswith('.txt'):
+            txtfile_path = os.path.join(imgfolder, file)
             new_list = []
-                    # todo: change to six significant figure
-            for line in reader:
-                item = line.split(' ')
-                for element in item:
-                    if element == '\n':
-                        continue
-                    element = float(element)
-                    element = f'{element:.6}'
-                    print(element)
+            with open(txtfile_path, 'r') as g:
+                reader = g.readlines()
+                        # todo: change to six significant figure
+                for line in reader:
+                    item = line.split(' ')
+                    for i,element in enumerate(item):
+                        if element == '\n':
+                            continue
+                        if i == 0:
+                            continue
+                        element = float(element)
+                        element = f'{element:.6g}'
+                        element = float(element)
+                        print(element)
+                        item[i] = str(element)
+                    new_item = ' '.join(item)
+                    new_list.append(new_item)
+                print(new_list)
+            with open(txtfile_path, 'w') as h:
+                h.writelines(new_list)
 
 
 if __name__ == "__main__":
-    change_sig_fig()
+    if mode == "count":
+        iso_segment_data()
+    if mode == "roundoff":
+        change_sig_fig()
