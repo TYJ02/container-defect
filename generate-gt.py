@@ -232,7 +232,7 @@ def generate():
                 imgpath = os.path.join(imgfolder, imgid)
                 print(imgpath)
                 img = cv.imread(imgpath)
-                width, height, channels = img.shape
+                 height, width, channels = img.shape
                 print(width, height)
 
                 # read file lines into list --> for each line, turn into an element in single image
