@@ -5,11 +5,6 @@ import cv2 as cv
 
 # json library turn list to json format
 
-output = [] 
-
-dict-single-img #has file name and obj array, both are dict
-dict-single-bbox
-
 
 all_class = {
             "0": {
@@ -64,8 +59,11 @@ def labelling(item):
 
 def generate():
     folder = os.getcwd()
+    imgfolder = os.path.join(folder, 'ing')
+    print(imgfolder)
     gen_output = []
-    for file in os.listdir():
+    for file in os.listdir(imgfolder):
+        print(file)
         if file.endswith('.jpg'):
             continue
         else:
@@ -73,25 +71,32 @@ def generate():
             dict_single_img = {}
             objects = []
             id = file.rstrip(".txt")
-            imgpath = id + ".jpg"
-            imgpath = os.path.join(folder, imgpath)
+            imgid = id + ".jpg"
+            filename = imgid 
+            imgpath = os.path.join(imgfolder, imgid)
+            print(imgpath)
             img = cv.imread(imgpath)
-            width, height = img.shape
+            width, height, channels = img.shape
+            print(width, height)
 
             # read file lines into list --> for each line, turn into an element in single image
-            txt_path = os.path.join(folder, file)
+            txt_path = os.path.join(imgfolder, file)
 
-            with open(file_path) as f:
+            with open(txt_path, 'r') as f:
                 reader = f.readlines()
 
             print(reader)
             for line in reader:
+                line = line.rstrip('\n')
+                line = line.split(' ')
                 dict_sigle_bbox = {}
                 color, label = labelling(line[0])
                 label_index = int(line[0])
                 landmark = ""
                 landmark_len = 0
+                x = float(line[1])
                 x = float(line[1])*width
+                print(f'x: {x}')
                 y = float(line[2])*height
                 w = float(line[3])*width
                 h = float(line[4])*height
