@@ -1,6 +1,7 @@
 import json
 import os
 import cv2 as cv
+from progress.bar import Bar
 
 
 # json library turn list to json format
@@ -213,61 +214,61 @@ def labelling(item):
 
 def generate():
     folder = os.getcwd()
-    imgfolder = os.path.join(folder, 'ing')
+    imgfolder = os.path.join(folder, 'img')
     print(imgfolder)
     gen_output = []
-    for file in os.listdir(imgfolder):
-        print(file)
-        if file.endswith('.jpg'):
-            continue
-        else:
-            filename = file
-            dict_single_img = {}
-            objects = []
-            id = file.rstrip(".txt")
-            imgid = id + ".jpg"
-            filename = imgid 
-            imgpath = os.path.join(imgfolder, imgid)
-            print(imgpath)
-            img = cv.imread(imgpath)
-            width, height, channels = img.shape
-            print(width, height)
+    with Bar("progressing ...") as bar:
+        for file in os.listdir(imgfolder):
+            print(file)
+            if file.endswith('.jpg'):
+                continue
+            else:
+                filename = file
+                dict_single_img = {}
+                objects = []
+                id = file.rstrip(".txt")
+                imgid = id + ".jpg"
+                filename = imgid 
+                imgpath = os.path.join(imgfolder, imgid)
+                print(imgpath)
+                img = cv.imread(imgpath)
+                width, height, channels = img.shape
+                print(width, height)
 
-            # read file lines into list --> for each line, turn into an element in single image
-            txt_path = os.path.join(imgfolder, file)
+                # read file lines into list --> for each line, turn into an element in single image
+                txt_path = os.path.join(imgfolder, file)
 
-            with open(txt_path, 'r') as f:
-                reader = f.readlines()
+                with open(txt_path, 'r') as f:
+                    reader = f.readlines()
 
-            print(reader)
-            for line in reader:
-                line = line.rstrip('\n')
-                line = line.split(' ')
-                dict_sigle_bbox = {}
-                color, label = labelling(line[0])
-                label_index = int(line[0])
-                landmark = ""
-                landmark_len = 0
-                x = float(line[1])
-                x = float(line[1])*width
-                print(f'x: {x}')
-                y = float(line[2])*height
-                w = float(line[3])*width
-                h = float(line[4])*height
-                center, box = make_bbox(x,y,w,h)
-                dict_sigle_bbox["bbox"] = box
-                dict_sigle_bbox["center"] = center
-                dict_sigle_bbox["color"] = color
-                dict_sigle_bbox["label"] = label
-                dict_sigle_bbox["label_index"] = label_index
-                dict_sigle_bbox["landmark"] = landmark
-                dict_sigle_bbox["landmark_len"] = landmark_len
-                objects.append(dict_sigle_bbox)
+                print(reader)
+                for line in reader:
+                    line = line.rstrip('\n')
+                    line = line.split(' ')
+                    dict_sigle_bbox = {}
+                    color, label = labelling(line[0])
+                    label_index = int(line[0])
+                    landmark = ""
+                    landmark_len = 0
+                    x = float(line[1])*width
+                    y = float(line[2])*height
+                    w = float(line[3])*width
+                    h = float(line[4])*height
+                    center, box = make_bbox(x,y,w,h)
+                    dict_sigle_bbox["bbox"] = box
+                    dict_sigle_bbox["center"] = center
+                    dict_sigle_bbox["color"] = color
+                    dict_sigle_bbox["label"] = label
+                    dict_sigle_bbox["label_index"] = label_index
+                    dict_sigle_bbox["landmark"] = landmark
+                    dict_sigle_bbox["landmark_len"] = landmark_len
+                    objects.append(dict_sigle_bbox)
+                    
+                dict_single_img["filename"] = filename
+                dict_single_img["obj_array"] = objects
 
-        dict_single_img["filename"] = filename
-        dict_single_img["obj_array"] = objects
-
-        gen_output.append(dict_single_img)
+            gen_output.append(dict_single_img)
+            bar.next()
 
     gt_path = os.path.join(folder, "gt.gt") 
     with open(gt_path, "w") as g:
