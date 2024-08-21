@@ -5,17 +5,171 @@ import cv2 as cv
 
 # json library turn list to json format
 
-
-all_class = {
+ocr_class = {
             "0": {
                     "color": "255, 0, 255", #RGB
-                    "label":"a"                  
+                    "label":"0"                  
                 },
             "1": {
                     "color":"255, 0, 0", #RGB
-                    "label": "b"
-                }
+                    "label": "1"
+                },
+            "2": {
+                    "color": "255, 0, 255", #RGB
+                    "label":"2"                  
+                },
+            "3": {
+                    "color":"255, 0, 0", #RGB
+                    "label": "3"
+                },
+            "4": {
+                    "color": "255, 0, 255", #RGB
+                    "label":"4"                  
+                },
+            "5": {
+                    "color":"255, 0, 0", #RGB
+                    "label": "5"
+                },
+            "6": {
+                    "color": "255, 0, 255", #RGB
+                    "label":"6"                  
+                },
+            "7": {
+                    "color":"255, 0, 0", #RGB
+                    "label": "7"
+                },
+            "8": {
+                    "color": "255, 0, 255", #RGB
+                    "label":"8"                  
+                },
+            "9": {
+                    "color":"255, 0, 0", #RGB
+                    "label": "9"
+                },
+            "10": {
+                    "color": "255, 0, 255", #RGB
+                    "label": "a"
+                },
+            "11": {
+                    "color":"255, 0, 0", #RGB
+                    "label":"b"                  
+                },
+            "12": {
+                    "color": "255, 0, 255", #RGB
+                    "label": "c"
+                },
+            "13": {
+                    "color": "255, 0, 255", #RGB
+                    "label":"d"                  
+                },
+            "14": {
+                    "color":"255, 0, 0", #RGB
+                    "label": "e"
+                },
+            "15": {
+                    "color": "255, 0, 255", #RGB
+                    "label":"f"                  
+                },
+            "16": {
+                    "color":"255, 0, 0", #RGB
+                    "label": "g"
+                },
+            "17": {
+                    "color": "255, 0, 255", #RGB
+                    "label":"h"                  
+                },
+            "18": {
+                    "color":"255, 0, 0", #RGB
+                    "label": "i"
+                },
+            "19": {
+                    "color": "255, 0, 255", #RGB
+                    "label":"j"                  
+                },
+            "20": {
+                    "color":"255, 0, 0", #RGB
+                    "label": "k"
+                },
+            "21": {
+                    "color": "255, 0, 255", #RGB
+                    "label":"l"                  
+                },
+            "22": {
+                    "color":"255, 0, 0", #RGB
+                    "label": "m"
+                },
+            "23": {
+                    "color": "255, 0, 255", #RGB
+                    "label":"n"                  
+                },
+            "24": {
+                    "color":"255, 0, 0", #RGB
+                    "label": "o"
+                },
+            "25": {
+                    "color": "255, 0, 255", #RGB
+                    "label":"p"                  
+                },
+            "26": {
+                    "color":"255, 0, 0", #RGB
+                    "label":"r"                  
+                },
+            "27": {
+                    "color": "255, 0, 255", #RGB
+                    "label": "s"
+                },
+            "28": {
+                    "color":"255, 0, 0", #RGB
+                    "label":"t"                  
+                },
+            "29": {
+                    "color": "255, 0, 255", #RGB
+                    "label": "u"
+                },
+            "30": {
+                    "color":"255, 0, 0", #RGB
+                    "label":"v"                  
+                },
+            "31": {
+                    "color": "255, 0, 255", #RGB
+                    "label": "w"
+                },
+            "32": {
+                    "color":"255, 0, 0", #RGB
+                    "label":"x"                  
+                },
+            "33": {
+                    "color": "255, 0, 255", #RGB
+                    "label": "y"
+                },
+            "34": {
+                    "color":"255, 0, 0", #RGB
+                    "label": "z"
+                },
             }      
+
+damage_class = {
+            "0": {
+                    "color": "255, 0, 255", #RGB
+                    "label":"container"                  
+                },
+            "1": {
+                    "color":"255, 0, 0", #RGB
+                    "label": "axis"
+                },
+            "2": {
+                    "color": "255, 0, 255", #RGB
+                    "label":"concave"                  
+                },
+            "3": {
+                    "color":"255, 0, 0", #RGB
+                    "label": "dentado"
+                },
+            "4": {
+                    "color":"255, 0, 0", #RGB
+                    "label": "perforation"
+                }
+            }
 
 '''
 [
@@ -52,9 +206,9 @@ def make_bbox(x,y,w,h):
     # when dealing with labelled data in cira core only
 
 def labelling(item):
-    global all_class
-    color = all_class[item]["color"]
-    label = all_class[item]["label"]
+    global ocr_class
+    color = ocr_class[item]["color"]
+    label = ocr_class[item]["label"]
     return color, label
 
 def generate():
