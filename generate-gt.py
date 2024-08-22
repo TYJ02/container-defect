@@ -5,6 +5,12 @@ from progress.bar import Bar
 
 
 # json library turn list to json format
+serial_class = {
+            "0": {
+                    "color": "255, 0, 255", #RGB
+                    "label":"0"                  
+                }
+        }
 
 ocr_class = {
             "0": {
