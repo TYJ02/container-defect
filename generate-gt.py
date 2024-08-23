@@ -201,11 +201,11 @@ damage_class = {
 def make_bbox(x,y,w,h):
 
     # math operation to turn ratio to int value
-    center = str(int(x)) + "," + str(int(y))
-    x = int(x - w/2)
-    y = int(y - h/2)
-    w = int(w)
-    h = int(h)
+    center = str(round(x)) + "," + str(round(y))
+    x = round(x - w/2)
+    y = round(y - h/2)
+    w = round(w)
+    h = round(h)
     box = str(x) + "," + str(y) + "," + str(w) + "," + str(h)
     return center, box
 
