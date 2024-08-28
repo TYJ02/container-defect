@@ -1,16 +1,19 @@
 import os
 
-def count()
+def count():
     # count number of nondamaged container image based on label in text file
     count = 0
-    folder = os.getcwd()
-    print(folder)
+    parent_folder = os.getcwd()
+    img_folder = 'train'
+    folder = os.path.join(parent_folder, img_folder)
+    print(f'folder is {folder}')
     for file in os.listdir(folder):
         if file.endswith('.jpg'):
             continue 
         else:
             id = file.rstrip(',jpg')
-            txt_path = os.path.join(folder,file)
+            txt_path = os.path.join(folder, file)
+            print(txt_path)
 
             with open(txt_path, 'r') as f:
                 reader = f.readlines()
