@@ -8,10 +8,13 @@ def count():
     folder = os.path.join(parent_folder, img_folder)
     print(f'folder is {folder}')
     for file in os.listdir(folder):
+        damage = False
         if file.endswith('.jpg'):
             continue 
         else:
             id = file.rstrip(',jpg')
+            if id.endswith('Cr') or id.endswith('Cl'):
+                continue
             txt_path = os.path.join(folder, file)
             print(txt_path)
 
@@ -21,11 +24,12 @@ def count():
                 line = line.rstrip('\n')
                 line = line.split(' ')
                 if line[0] != '0':
+                    print(line)
                     damage = True
                     break
                 else:
                     damage = False
-            if damage == False:
+            if damage is False:
                 count += 1
     print(count)
 
