@@ -32,18 +32,17 @@ def count():
                     damage = False
             if damage is False:
                 count += 1
-                crop_section(id, txt_path)
+                crop_section(id, txt_path, folder)
             totalcount += 1
             if totalcount >= 40:
                 break
     print(f'no damage image count is {count}')
     print(f'total count is {totalcount}')
 
-def crop_section(id, txt_path):
+def crop_section(id, txt_path, imgfolder):
     width = 1920
     height = 1080
-    newfolder = "E:/nodamage"
-    img_path = os.path.join(newfolder, id+'.png')
+    img_path = os.path.join(imgfolder, id+'.png')
     print(img_path)
     image = cv.imread(img_path)
     with open(txt_path, 'r') as f:
@@ -55,6 +54,7 @@ def crop_section(id, txt_path):
 
 
 def extract_and_write(item: list, image, width, height):
+    newfolder = "E:/nodamage"
     x = float(item[1])*width
     y = float(item[2])*height
     w = float(item[3])*width
@@ -69,7 +69,8 @@ def extract_and_write(item: list, image, width, height):
             y_k = y_1 + j*h_1
             img = image[y_k:y_k + h_1, x_k:x_k + w_1]
             try:
-                cv.imwrite(f'test{k}.png', img)
+                imgpath = os.path.join(newfolder, f'test{k}.png')
+                cv.imwrite(imgpath, img)
             except cv.error:
                 continue
             print(f'k is {k}')
