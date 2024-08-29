@@ -50,10 +50,10 @@ def crop_section(id, txt_path, imgfolder):
     for line in reader:
         line = line.rstrip('\n')
         item = line.split(' ')
-        extract_and_write(item, image, width, height)
+        extract_and_write(item, image, id, width, height)
 
 
-def extract_and_write(item: list, image, width, height):
+def extract_and_write(item: list, image, id, width, height):
     newfolder = "E:/nodamage"
     x = float(item[1])*width
     y = float(item[2])*height
@@ -69,7 +69,7 @@ def extract_and_write(item: list, image, width, height):
             y_k = y_1 + j*h_1
             img = image[y_k:y_k + h_1, x_k:x_k + w_1]
             try:
-                imgpath = os.path.join(newfolder, f'test{k}.png')
+                imgpath = os.path.join(newfolder, f'{id}{k}.png')
                 cv.imwrite(imgpath, img)
             except cv.error:
                 continue
