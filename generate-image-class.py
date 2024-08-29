@@ -34,6 +34,8 @@ def count():
                 count += 1
                 crop_section(id, txt_path)
             totalcount += 1
+            if totalcount >= 40:
+                break
     print(f'no damage image count is {count}')
     print(f'total count is {totalcount}')
 
@@ -64,7 +66,7 @@ def extract_and_write(item: list, image, width, height):
     for i in range(8):
         for j in range(3):
             x_k = x_1 + i*w_1
-            y_k = y_1 + i*h_1
+            y_k = y_1 + j*h_1
             img = image[y_k:y_k + h_1, x_k:x_k + w_1]
             try:
                 cv.imwrite(f'test{k}.png', img)
