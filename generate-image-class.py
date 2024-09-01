@@ -29,20 +29,23 @@ def count(class_id):
             for line in reader:
                 line = line.rstrip('\n')
                 line = line.split(' ')
+                '''
                 if line[0] != f'{class_id}':
                     print(line)
                     damage = True
                     break
+                '''
+                if line[0] == f'{class_id}':
+                    damage = True
+                    count += 1
+                    break
                 else:
                     damage = False
-            if damage is False:
-                count += 1
-                create_image()
+            if damage is True:
+                cv.imwrite('E:/newdentclass/{img_file}', image)
     print(count)
 
-def create_image():
-    width = 1920
-    height = 1080
+def create_image(image,width,height,x,y):
     image = cv.imread('1646813296_Camera_A.png')
     with open('1646813296_Camera_A.txt', 'r') as f:
         reader = f.readlines()
